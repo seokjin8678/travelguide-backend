@@ -1,6 +1,7 @@
 package com.seokjin.travelguide.controller;
 
 import com.seokjin.travelguide.dto.response.ErrorResponse;
+import com.seokjin.travelguide.dto.response.Response;
 import com.seokjin.travelguide.exception.TripGuideException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class ExceptionController {
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ErrorResponse invalidRequestHandler(MethodArgumentNotValidException e) {
+    public Response invalidRequestHandler(MethodArgumentNotValidException e) {
         ErrorResponse response = ErrorResponse.builder()
                 .code("400")
                 .message("잘못된 요청입니다.")
@@ -34,7 +35,7 @@ public class ExceptionController {
 
     @ResponseBody
     @ExceptionHandler(TripGuideException.class)
-    public ResponseEntity<ErrorResponse> hodologException(TripGuideException e) {
+    public ResponseEntity<Response> tripGuideException(TripGuideException e) {
         int statusCode = e.getStatusCode();
 
         ErrorResponse body = ErrorResponse.builder()

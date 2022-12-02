@@ -3,19 +3,16 @@ package com.seokjin.travelguide.dto.response;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Builder;
-import lombok.Getter;
 
-/**
- * { "code": "400", "message": "잘못된 요청입니다.", "validation": { "title": "값을 입력해주세요" } }
- */
-@Getter
-public class ErrorResponse extends Response {
+public class WarningResponse<T> extends Response {
     private final Map<String, String> validation;
+    private T result;
 
     @Builder
-    public ErrorResponse(String code, String message, Map<String, String> validation) {
+    public WarningResponse(String code, String message, Map<String, String> validation, T result) {
         super(code, message);
         this.validation = validation != null ? validation : new HashMap<>();
+        this.result = result;
     }
 
     public void addValidation(String fieldName, String errorMessage) {
