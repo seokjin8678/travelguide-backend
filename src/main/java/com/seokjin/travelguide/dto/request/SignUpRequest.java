@@ -24,13 +24,6 @@ public class SignUpRequest {
     @NotBlank
     private String nickname;
 
-    public SignUpRequest(String email, String password, String confirmPassword, String nickname) {
-        this.email = email;
-        this.password = password;
-        this.confirmPassword = confirmPassword;
-        this.nickname = nickname;
-    }
-
     public void validate() {
         if (!password.equals(confirmPassword)) {
             throw new InvalidRequestException(
