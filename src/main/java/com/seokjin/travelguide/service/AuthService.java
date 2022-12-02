@@ -23,8 +23,11 @@ public class AuthService {
         if (userRepository.existsByNickname(request.getNickname())) {
             throw new InvalidRequestException("nickname", "해당 닉네임이 존재합니다.");
         }
-
-        User user = new User(request.getEmail(), request.getPassword(), request.getNickname());
+        User user = User.builder()
+                .email(request.getEmail())
+                .password(request.getPassword())
+                .nickname(request.getNickname())
+                .build();
         userRepository.save(user);
 
         return SignUpResponse.builder()
