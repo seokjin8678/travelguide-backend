@@ -7,12 +7,14 @@ import com.seokjin.travelguide.domain.User;
 import com.seokjin.travelguide.dto.request.SignUpRequest;
 import com.seokjin.travelguide.exception.InvalidRequestException;
 import com.seokjin.travelguide.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
@@ -20,12 +22,11 @@ class AuthServiceTest {
     @Mock
     UserRepository userRepository;
 
+    @InjectMocks
     AuthService authService;
 
-    @BeforeEach
-    void setUp() {
-        authService = new AuthService(userRepository);
-    }
+    @Spy
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Test
     @DisplayName("회원가입 시 동일한 이메일이 있으면 예외가 발생해야 한다.")
@@ -76,7 +77,7 @@ class AuthServiceTest {
         signUpRequest.setConfirmPassword("1234");
         User user = User.builder()
                 .email(signUpRequest.getEmail())
-                .password(signUpRequest.getPassword())
+                .password(encoder.encode(signUpRequest.getPassword()))
                 .nickname(signUpRequest.getNickname())
                 .build();
         doReturn(user).when(userRepository).save(any(User.class));
@@ -89,5 +90,7 @@ class AuthServiceTest {
                 .isEqualTo(signUpRequest.getEmail());
         assertThat(signUpUser.getNickname())
                 .isEqualTo(signUpRequest.getNickname());
+        assertThat(signUpUser.getPassword())
+                .isNotEqualTo("1234");
     }
 }

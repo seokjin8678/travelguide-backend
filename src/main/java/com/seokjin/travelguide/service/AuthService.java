@@ -5,6 +5,7 @@ import com.seokjin.travelguide.dto.request.SignUpRequest;
 import com.seokjin.travelguide.exception.InvalidRequestException;
 import com.seokjin.travelguide.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder;
 
     @Transactional
     public User signUp(SignUpRequest request) {
@@ -24,7 +26,7 @@ public class AuthService {
         }
         User user = User.builder()
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(encoder.encode(request.getPassword()))
                 .nickname(request.getNickname())
                 .build();
         return userRepository.save(user);
