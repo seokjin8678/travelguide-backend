@@ -10,6 +10,9 @@ import lombok.Getter;
  */
 @Getter
 public class ErrorResponse extends Response {
+    public static ErrorResponse UNAUTHORIZED = new ErrorResponse("401", "권한이 없습니다.", null);
+    public static ErrorResponse FORBIDDEN = new ErrorResponse("403", "권한이 없습니다.", null);
+
     private final Map<String, String> validation;
 
     @Builder
