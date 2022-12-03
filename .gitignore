@@ -38,3 +38,6 @@ out/
 
 ### QueryDSL ###
 src/main/generated/
+
+### SECURITY ###
+src/main/resources/jwt.properties
