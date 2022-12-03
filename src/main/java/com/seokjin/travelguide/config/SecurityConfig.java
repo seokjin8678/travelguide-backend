@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @EnableWebSecurity
 @Configuration
@@ -23,13 +24,14 @@ public class SecurityConfig {
 
     private final ObjectMapper objectMapper;
     private final JwtTokenProvider jwtTokenProvider;
+    private final CorsConfigurationSource corsConfigurationSource;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .httpBasic().disable()
                 .formLogin().disable()
-                .cors().disable()
+                .cors().configurationSource(corsConfigurationSource).and()
                 .csrf().disable()
                 .headers().frameOptions().sameOrigin()
                 .and()
@@ -46,7 +48,6 @@ public class SecurityConfig {
                             response.getOutputStream(),
                             ErrorResponse.UNAUTHORIZED
                     );
-
                 })
                 .accessDeniedHandler((request, response, accessDeniedException) -> {
                     response.setStatus(HttpStatus.FORBIDDEN.value());
