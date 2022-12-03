@@ -1,5 +1,6 @@
 package com.seokjin.travelguide.controller;
 
+import com.seokjin.travelguide.domain.User;
 import com.seokjin.travelguide.dto.request.SignUpRequest;
 import com.seokjin.travelguide.dto.response.Response;
 import com.seokjin.travelguide.dto.response.SignUpResponse;
@@ -28,7 +29,11 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<Response> signup(@RequestBody @Valid SignUpRequest request) {
         request.validate();
-        SignUpResponse signUpResponse = authService.signup(request);
+        User user = authService.signup(request);
+        SignUpResponse signUpResponse = SignUpResponse.builder()
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .build();
         return ResponseEntity.ok()
                 .body(new SuccessResponse<>("200", "회원가입이 완료되었습니다.", signUpResponse));
     }
