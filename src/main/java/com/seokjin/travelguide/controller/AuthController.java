@@ -1,7 +1,8 @@
 package com.seokjin.travelguide.controller;
 
-import com.seokjin.travelguide.domain.Role;
-import com.seokjin.travelguide.domain.User;
+import static com.seokjin.travelguide.config.JwtAuthorizationFilter.AUTHORIZATION_HEADER;
+
+import com.seokjin.travelguide.domain.Member;
 import com.seokjin.travelguide.dto.request.SignInRequest;
 import com.seokjin.travelguide.dto.request.SignUpRequest;
 import com.seokjin.travelguide.dto.response.Response;
@@ -39,17 +40,17 @@ public class AuthController {
 
         String token = jwtTokenProvider.createToken(authentication);
         return ResponseEntity.ok()
-                .header("Authorization", "Bearer " + token)
+                .header(AUTHORIZATION_HEADER, "Bearer " + token)
                 .body(new SuccessResponse<>("200", "로그인 성공", token));
     }
 
     @PostMapping("/signup")
     public ResponseEntity<Response> signup(@RequestBody @Valid SignUpRequest request) {
         request.validate();
-        User user = authService.signUp(request);
+        Member member = authService.signUp(request);
         SignUpResponse signUpResponse = SignUpResponse.builder()
-                .email(user.getEmail())
-                .nickname(user.getNickname())
+                .email(member.getEmail())
+                .nickname(member.getNickname())
                 .build();
         return ResponseEntity.ok()
                 .body(new SuccessResponse<>("200", "회원가입이 완료되었습니다.", signUpResponse));

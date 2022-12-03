@@ -3,10 +3,10 @@ package com.seokjin.travelguide.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import com.seokjin.travelguide.domain.User;
+import com.seokjin.travelguide.domain.Member;
 import com.seokjin.travelguide.dto.request.SignUpRequest;
 import com.seokjin.travelguide.exception.InvalidRequestException;
-import com.seokjin.travelguide.repository.UserRepository;
+import com.seokjin.travelguide.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 class AuthServiceTest {
 
     @Mock
-    UserRepository userRepository;
+    MemberRepository memberRepository;
 
     @InjectMocks
     AuthService authService;
@@ -39,7 +39,7 @@ class AuthServiceTest {
         signUpRequest.setConfirmPassword("1234");
 
         // when
-        when(userRepository.existsByEmail("test@test.com"))
+        when(memberRepository.existsByEmail("test@test.com"))
                 .thenReturn(true);
 
         // then
@@ -58,7 +58,7 @@ class AuthServiceTest {
         signUpRequest.setConfirmPassword("1234");
 
         // when
-        when(userRepository.existsByNickname("test"))
+        when(memberRepository.existsByNickname("test"))
                 .thenReturn(true);
 
         // then
@@ -75,22 +75,22 @@ class AuthServiceTest {
         signUpRequest.setNickname("aaa");
         signUpRequest.setPassword("1234");
         signUpRequest.setConfirmPassword("1234");
-        User user = User.builder()
+        Member member = Member.builder()
                 .email(signUpRequest.getEmail())
                 .password(encoder.encode(signUpRequest.getPassword()))
                 .nickname(signUpRequest.getNickname())
                 .build();
-        doReturn(user).when(userRepository).save(any(User.class));
+        doReturn(member).when(memberRepository).save(any(Member.class));
 
         // when
-        User signUpUser = authService.signUp(signUpRequest);
+        Member signUpMember = authService.signUp(signUpRequest);
 
         // then
-        assertThat(signUpUser.getEmail())
+        assertThat(signUpMember.getEmail())
                 .isEqualTo(signUpRequest.getEmail());
-        assertThat(signUpUser.getNickname())
+        assertThat(signUpMember.getNickname())
                 .isEqualTo(signUpRequest.getNickname());
-        assertThat(signUpUser.getPassword())
+        assertThat(signUpMember.getPassword())
                 .isNotEqualTo("1234");
     }
 }

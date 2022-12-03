@@ -9,13 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "member_role")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserRole {
@@ -30,10 +28,10 @@ public class UserRole {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id", nullable = false)
-    private User user;
+    private Member member;
 
-    public UserRole(Role role, User user) {
+    public UserRole(Role role, Member member) {
         this.role = role;
-        this.user = user;
+        this.member = member;
     }
 }

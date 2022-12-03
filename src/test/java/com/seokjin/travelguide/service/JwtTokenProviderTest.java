@@ -1,16 +1,14 @@
 package com.seokjin.travelguide.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import com.seokjin.travelguide.domain.Role;
-import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 
 class JwtTokenProviderTest {
     JwtTokenProvider jwtTokenProvider;
@@ -23,11 +21,18 @@ class JwtTokenProviderTest {
     }
 
     @Test
-    void name() {
+    @DisplayName("JWT 토큰이 정상적으로 생성되어야 한다.")
+    void createJwtTokenCouldBeSuccess() {
+        // given
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                "test@test.com", "1234", List.of(new SimpleGrantedAuthority(Role.ROLE_MEMBER.name()),
-                new SimpleGrantedAuthority(Role.ROLE_ADMIN.name())));
+                "test@test.com", "1234", List.of(new SimpleGrantedAuthority(Role.MEMBER.name())));
+        // when
         String token = jwtTokenProvider.createToken(authenticationToken);
-        System.out.println(token);
+
+        // then
+        assertThat(jwtTokenProvider.validateToken(token))
+                .isTrue();
+        assertThat(jwtTokenProvider.getAuthentication(token).isAuthenticated())
+                .isTrue();
     }
 }
