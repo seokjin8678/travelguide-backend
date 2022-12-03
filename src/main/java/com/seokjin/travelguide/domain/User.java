@@ -42,7 +42,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
-        this.roles.add(new UserRole(Role.MEMBER, this));
+        this.roles.add(new UserRole(Role.ROLE_MEMBER, this));
     }
 
     public List<UserRole> getRoles() {
