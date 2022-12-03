@@ -24,12 +24,13 @@ public class JwtAuthorizationFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        HttpServletRequest httpServletrequest = (HttpServletRequest) request;
-        String token = resolveToken(httpServletrequest);
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        String token = resolveToken(httpServletRequest);
 
         if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.info("{}님이 {}로 요청하였습니다.", authentication.getName(), httpServletRequest.getRequestURI());
         }
         chain.doFilter(request, response);
     }

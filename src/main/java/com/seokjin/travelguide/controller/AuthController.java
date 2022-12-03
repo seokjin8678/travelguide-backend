@@ -12,6 +12,7 @@ import com.seokjin.travelguide.service.AuthService;
 import com.seokjin.travelguide.service.JwtTokenProvider;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -39,6 +41,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = jwtTokenProvider.createToken(authentication);
+        log.info("{}님이 로그인 하였습니다.", request.getEmail());
         return ResponseEntity.ok()
                 .header(AUTHORIZATION_HEADER, "Bearer " + token)
                 .body(new SuccessResponse<>("200", "로그인 성공", token));
@@ -52,6 +55,7 @@ public class AuthController {
                 .email(member.getEmail())
                 .nickname(member.getNickname())
                 .build();
+        log.info("(email:{}, nickname:{})님이 회원가입 하였습니다.", member.getEmail(), member.getNickname());
         return ResponseEntity.ok()
                 .body(new SuccessResponse<>("200", "회원가입이 완료되었습니다.", signUpResponse));
     }
