@@ -15,7 +15,7 @@ public class AuthService {
     private final UserRepository userRepository;
 
     @Transactional
-    public User signup(SignUpRequest request) {
+    public User signUp(SignUpRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new InvalidRequestException("email", "해당 이메일이 존재합니다.");
         }

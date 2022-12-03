@@ -29,7 +29,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<Response> signup(@RequestBody @Valid SignUpRequest request) {
         request.validate();
-        User user = authService.signup(request);
+        User user = authService.signUp(request);
         SignUpResponse signUpResponse = SignUpResponse.builder()
                 .email(user.getEmail())
                 .nickname(user.getNickname())
