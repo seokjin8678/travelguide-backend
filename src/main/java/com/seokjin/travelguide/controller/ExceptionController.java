@@ -6,6 +6,7 @@ import com.seokjin.travelguide.exception.TripGuideException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -46,5 +47,16 @@ public class ExceptionController {
 
         return ResponseEntity.status(statusCode)
                 .body(body);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Response> badCredentialsException(BadCredentialsException e) {
+        ErrorResponse response = ErrorResponse.builder()
+                .code("400")
+                .message("해당되는 계정이 없거나 비밀번호가 맞지 않습니다.")
+                .build();
+        return ResponseEntity.status(400)
+                .body(response);
     }
 }

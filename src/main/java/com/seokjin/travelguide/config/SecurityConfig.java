@@ -1,8 +1,10 @@
 package com.seokjin.travelguide.config;
 
+import static com.seokjin.travelguide.domain.Role.*;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seokjin.travelguide.domain.Role;
 import com.seokjin.travelguide.dto.response.ErrorResponse;
+import com.seokjin.travelguide.service.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
@@ -20,6 +23,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final ObjectMapper objectMapper;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
     public WebSecurityCustomizer configure() {
@@ -34,7 +38,7 @@ public class SecurityConfig {
         http
                 .antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/api/v1/**").hasAuthority(Role.MEMBER.name())
+                .antMatchers("/api/v1/**").hasAuthority(ROLE_MEMBER.name())
                 .and()
                 .httpBasic().disable()
                 .formLogin().disable()
@@ -46,7 +50,8 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .anyRequest().permitAll()
                 .and()
-//                .addFilterBefore() TODO
+                .addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider),
+                        UsernamePasswordAuthenticationFilter.class)
 
                 .exceptionHandling()
                 .authenticationEntryPoint((request, response, authException) -> {
