@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seokjin.travelguide.dto.response.ErrorResponse;
 import com.seokjin.travelguide.service.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+@Slf4j
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
@@ -42,6 +44,7 @@ public class SecurityConfig {
 
                 .exceptionHandling()
                 .authenticationEntryPoint((request, response, authException) -> {
+                    log.info("{}에 대한 요청이 실패했습니다. (권한 없음) IP={}", request.getRequestURI(), request.getRemoteAddr());
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     objectMapper.writeValue(
@@ -50,6 +53,7 @@ public class SecurityConfig {
                     );
                 })
                 .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    log.info("{}에 대한 요청이 실패했습니다. (접근 제한) IP={}", request.getRequestURI(), request.getRemoteAddr());
                     response.setStatus(HttpStatus.FORBIDDEN.value());
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     objectMapper.writeValue(
