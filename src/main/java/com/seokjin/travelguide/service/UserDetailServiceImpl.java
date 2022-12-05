@@ -28,7 +28,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
         return memberRepository.findByEmail(username)
                 .map(this::createUser)
                 .orElseThrow(() -> {
-                    log.info("{} 계정으로 로그인이 실패했습니다.", username);
                     throw new UsernameNotFoundException(username);
                 });
     }

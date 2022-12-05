@@ -30,7 +30,8 @@ public class JwtAuthorizationFilter extends GenericFilterBean {
         if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.info("{}님이 {}로 요청하였습니다.", authentication.getName(), httpServletRequest.getRequestURI());
+            log.info("{}님이 {}로 요청하였습니다. IP={}", authentication.getName(), httpServletRequest.getRequestURI(),
+                    request.getRemoteAddr());
         }
         chain.doFilter(request, response);
     }

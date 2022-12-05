@@ -41,7 +41,6 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class)
-
                 .exceptionHandling()
                 .authenticationEntryPoint((request, response, authException) -> {
                     log.info("{}에 대한 요청이 실패했습니다. (권한 없음) IP={}", request.getRequestURI(), request.getRemoteAddr());

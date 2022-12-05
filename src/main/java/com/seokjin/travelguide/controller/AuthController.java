@@ -10,6 +10,7 @@ import com.seokjin.travelguide.dto.response.SignUpResponse;
 import com.seokjin.travelguide.dto.response.SuccessResponse;
 import com.seokjin.travelguide.service.AuthService;
 import com.seokjin.travelguide.service.JwtTokenProvider;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,28 +35,32 @@ public class AuthController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @PostMapping("/signin")
-    public ResponseEntity<Response> signin(@RequestBody @Valid SignInRequest request) {
+    public ResponseEntity<Response> signin(@RequestBody @Valid SignInRequest request, HttpServletRequest httpRequest) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 request.getEmail(), request.getPassword());
+        if (!authenticationToken.isAuthenticated()) {
+            log.info("{}에 대한 로그인이 실패 하였습니다. IP={}", request.getEmail(), httpRequest.getRemoteAddr());
+        }
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = jwtTokenProvider.createToken(authentication);
-        log.info("{}님이 로그인 하였습니다.", request.getEmail());
+        log.info("{}님이 로그인 하였습니다. IP={}", request.getEmail(), httpRequest.getRemoteAddr());
         return ResponseEntity.ok()
                 .header(AUTHORIZATION_HEADER, "Bearer " + token)
                 .body(new SuccessResponse<>("200", "로그인 성공", token));
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Response> signup(@RequestBody @Valid SignUpRequest request) {
+    public ResponseEntity<Response> signup(@RequestBody @Valid SignUpRequest request, HttpServletRequest httpRequest) {
         request.validate();
         Member member = authService.signUp(request);
         SignUpResponse signUpResponse = SignUpResponse.builder()
                 .email(member.getEmail())
                 .nickname(member.getNickname())
                 .build();
-        log.info("(email:{}, nickname:{})님이 회원가입 하였습니다.", member.getEmail(), member.getNickname());
+        log.info("(email:{}, nickname:{})님이 회원가입 하였습니다. IP={}", member.getEmail(), member.getNickname(),
+                httpRequest.getRemoteAddr());
         return ResponseEntity.ok()
                 .body(new SuccessResponse<>("200", "회원가입이 완료되었습니다.", signUpResponse));
     }

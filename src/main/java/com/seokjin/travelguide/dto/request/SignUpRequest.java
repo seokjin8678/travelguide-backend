@@ -27,6 +27,7 @@ public class SignUpRequest {
     public void validate() {
         if (!password.equals(confirmPassword)) {
             throw new InvalidRequestException(
+                    "회원가입 오류: 비밀번호와 확인 비밀번호 불일치",
                     Validation.of("password", "비밀번호와 확인 비밀번호가 맞지 않습니다."),
                     Validation.of("confirmPassword", "비밀번호와 확인 비밀번호가 맞지 않습니다."));
         }

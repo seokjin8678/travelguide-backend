@@ -7,17 +7,17 @@ public class InvalidRequestException extends TripGuideException {
 
     private static final String MESSAGE = "잘못된 요청입니다.";
 
-    public InvalidRequestException() {
-        super(MESSAGE);
+    public InvalidRequestException(String logMessage) {
+        super(MESSAGE, logMessage);
     }
 
-    public InvalidRequestException(String fieldName, String message) {
-        super(MESSAGE);
+    public InvalidRequestException(String logMessage, String fieldName, String message) {
+        super(MESSAGE, logMessage);
         addValidation(fieldName, message);
     }
 
-    public InvalidRequestException(Validation... validations) {
-        super(MESSAGE);
+    public InvalidRequestException(String logMessage, Validation... validations) {
+        super(MESSAGE, logMessage);
         for (Validation validation : validations) {
             addValidation(validation.getFieldName(), validation.getMessage());
         }

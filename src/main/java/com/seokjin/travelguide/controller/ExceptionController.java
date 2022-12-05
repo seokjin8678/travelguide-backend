@@ -3,6 +3,7 @@ package com.seokjin.travelguide.controller;
 import com.seokjin.travelguide.dto.response.ErrorResponse;
 import com.seokjin.travelguide.dto.response.Response;
 import com.seokjin.travelguide.exception.TripGuideException;
+import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,9 @@ public class ExceptionController {
 
     @ResponseBody
     @ExceptionHandler(TripGuideException.class)
-    public ResponseEntity<Response> tripGuideException(TripGuideException e) {
+    public ResponseEntity<Response> tripGuideException(TripGuideException e, HttpServletRequest httpRequest) {
+        log.info("{}에 대한 요청이 실패했습니다. ({}) IP={}", httpRequest.getRequestURI(), e.getLogMessage(),
+                httpRequest.getRemoteAddr());
         int statusCode = e.getStatusCode();
 
         ErrorResponse body = ErrorResponse.builder()
