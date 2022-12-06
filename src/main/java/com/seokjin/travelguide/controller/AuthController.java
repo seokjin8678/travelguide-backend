@@ -9,16 +9,11 @@ import com.seokjin.travelguide.dto.response.Response;
 import com.seokjin.travelguide.dto.response.SignUpResponse;
 import com.seokjin.travelguide.dto.response.SuccessResponse;
 import com.seokjin.travelguide.service.AuthService;
-import com.seokjin.travelguide.service.JwtTokenProvider;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,20 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @PostMapping("/signin")
     public ResponseEntity<Response> signin(@RequestBody @Valid SignInRequest request, HttpServletRequest httpRequest) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                request.getEmail(), request.getPassword());
-        if (!authenticationToken.isAuthenticated()) {
-            log.info("{}에 대한 로그인이 실패 하였습니다. IP={}", request.getEmail(), httpRequest.getRemoteAddr());
-        }
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String token = jwtTokenProvider.createToken(authentication);
+        String token = authService.signIn(request);
         log.info("{}님이 로그인 하였습니다. IP={}, TOKEN={}", request.getEmail(), httpRequest.getRemoteAddr(), token);
         return ResponseEntity.ok()
                 .header(AUTHORIZATION_HEADER, "Bearer " + token)

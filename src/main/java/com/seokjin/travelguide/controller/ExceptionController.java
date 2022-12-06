@@ -57,7 +57,8 @@ public class ExceptionController {
 
     @ResponseBody
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<Response> badCredentialsException(BadCredentialsException e) {
+    public ResponseEntity<Response> badCredentialsException(BadCredentialsException e, HttpServletRequest request) {
+        log.info("{}에 대한 요청이 실패했습니다. (로그인 오류) IP={}", request.getRequestURI(), request.getRemoteAddr());
         ErrorResponse response = ErrorResponse.builder()
                 .code("400")
                 .message("해당되는 계정이 없거나 비밀번호가 맞지 않습니다.")
