@@ -45,7 +45,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = jwtTokenProvider.createToken(authentication);
-        log.info("{}님이 로그인 하였습니다. IP={}", request.getEmail(), httpRequest.getRemoteAddr());
+        log.info("{}님이 로그인 하였습니다. IP={}, TOKEN={}", request.getEmail(), httpRequest.getRemoteAddr(), token);
         return ResponseEntity.ok()
                 .header(AUTHORIZATION_HEADER, "Bearer " + token)
                 .body(new SuccessResponse<>("200", "로그인 성공", token));

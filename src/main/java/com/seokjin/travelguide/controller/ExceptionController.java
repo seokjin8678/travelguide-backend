@@ -24,7 +24,8 @@ public class ExceptionController {
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Response invalidRequestHandler(MethodArgumentNotValidException e) {
+    public Response invalidRequestHandler(MethodArgumentNotValidException e, HttpServletRequest httpRequest) {
+        log.info("{}에 대한 요청이 실패했습니다. (검증 오류) IP={}", httpRequest.getRequestURI(), httpRequest.getRemoteAddr());
         ErrorResponse response = ErrorResponse.builder()
                 .code("400")
                 .message("잘못된 요청입니다.")
