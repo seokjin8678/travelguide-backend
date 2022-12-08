@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,10 +32,10 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 });
     }
 
-    private User createUser(Member member) {
+    private CustomUser createUser(Member member) {
         List<SimpleGrantedAuthority> authorities = member.getRoles().stream()
                 .map(userRole -> new SimpleGrantedAuthority(userRole.getRole().name()))
                 .collect(Collectors.toList());
-        return new User(member.getEmail(), member.getPassword(), authorities);
+        return new CustomUser(member.getEmail(), member.getPassword(), member.getNickname(), authorities);
     }
 }

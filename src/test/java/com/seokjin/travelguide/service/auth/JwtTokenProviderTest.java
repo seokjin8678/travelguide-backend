@@ -2,7 +2,6 @@ package com.seokjin.travelguide.service.auth;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.seokjin.travelguide.domain.member.Role;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,8 +23,11 @@ class JwtTokenProviderTest {
     @DisplayName("JWT 토큰이 정상적으로 생성되어야 한다.")
     void createJwtTokenCouldBeSuccess() {
         // given
+        CustomUser user = new CustomUser("test@test.com", "123456",
+                "nickname", List.of(new SimpleGrantedAuthority("MEMBER")));
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                "test@test.com", "1234", List.of(new SimpleGrantedAuthority(Role.MEMBER.name())));
+                user, user.getPassword(), user.getAuthorities());
+
         // when
         String token = jwtTokenProvider.createToken(authenticationToken);
 

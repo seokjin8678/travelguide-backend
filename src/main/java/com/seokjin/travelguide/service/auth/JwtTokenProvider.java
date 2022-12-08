@@ -22,7 +22,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,8 +50,10 @@ public class JwtTokenProvider implements InitializingBean {
         String roles = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
+        CustomUser userDetails = (CustomUser) authentication.getPrincipal();
 
         claims.put("roles", roles);
+        claims.put("nickname", userDetails.getNickname());
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims)
@@ -90,7 +91,8 @@ public class JwtTokenProvider implements InitializingBean {
         List<SimpleGrantedAuthority> authorities = Arrays.stream(claims.get("roles").toString().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-        User user = new User(claims.getSubject(), "", authorities);
+        CustomUser user = new CustomUser(claims.getSubject(), "", claims.get("nickname").toString(),
+                authorities);
 
         return new UsernamePasswordAuthenticationToken(user, token, authorities);
     }

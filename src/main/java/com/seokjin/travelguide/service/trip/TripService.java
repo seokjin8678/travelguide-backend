@@ -20,14 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class TripService {
     private final TripRepository tripRepository;
-    private final MemberService memberService;
 
     @Transactional
-    public TripCreateResponse create(TripCreateRequest request, String email) {
-        String nickname = memberService.findNicknameByEmail(email);
+    public TripCreateResponse create(TripCreateRequest request, String nickname) {
         Trip trip = request.toEntity(nickname);
         tripRepository.save(trip);
-        log.info("{} 계정이 새로운 여행을 생성했습니다. ID={}", email, trip.getId());
         return TripCreateResponse.of(trip);
     }
 
