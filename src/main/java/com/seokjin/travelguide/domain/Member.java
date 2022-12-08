@@ -46,4 +46,8 @@ public class Member {
     public List<UserRole> getRoles() {
         return List.copyOf(roles);
     }
+
+    public void setAdmin() {
+        this.roles.add(new UserRole(Role.ADMIN, this));
+    }
 }
