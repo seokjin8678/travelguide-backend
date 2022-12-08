@@ -172,7 +172,7 @@ class AuthControllerTest {
                         .content(objectMapper.writeValueAsString(signInRequest)))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Authorization", "Bearer jwttoken"))
-                .andExpect(jsonPath("$.result").value("jwttoken"));
+                .andExpect(jsonPath("$.result").value("Bearer jwttoken"));
     }
 
     @Test
