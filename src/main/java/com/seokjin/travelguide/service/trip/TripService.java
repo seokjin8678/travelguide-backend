@@ -8,6 +8,7 @@ import com.seokjin.travelguide.dto.response.trip.TripDetailResponse;
 import com.seokjin.travelguide.dto.response.trip.TripPreviewResponse;
 import com.seokjin.travelguide.exception.TripNotFoundException;
 import com.seokjin.travelguide.repository.trip.TripRepository;
+import com.seokjin.travelguide.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,10 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class TripService {
     private final TripRepository tripRepository;
+    private final MemberService memberService;
 
     @Transactional
     public TripCreateResponse create(TripCreateRequest request, String email) {
-        Trip trip = request.toEntity(email);
+        String nickname = memberService.findNicknameByEmail(email);
+        Trip trip = request.toEntity(nickname);
         tripRepository.save(trip);
         log.info("{} 계정이 새로운 여행을 생성했습니다. ID={}", email, trip.getId());
         return TripCreateResponse.of(trip);
