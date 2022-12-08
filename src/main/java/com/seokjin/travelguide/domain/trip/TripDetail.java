@@ -23,7 +23,10 @@ public class TripDetail {
     private String contents;
 
     @Column(nullable = false)
-    private String location;
+    private String country;
+
+    @Column(nullable = false)
+    private String city;
 
     @Column(nullable = false)
     private String latitude;
@@ -32,9 +35,10 @@ public class TripDetail {
     private String longitude;
 
     @Builder
-    public TripDetail(String contents, String location, String latitude, String longitude) {
+    public TripDetail(String contents, String country, String city, String latitude, String longitude) {
         this.contents = contents;
-        this.location = location;
+        this.country = country;
+        this.city = city;
         this.latitude = latitude;
         this.longitude = longitude;
     }
