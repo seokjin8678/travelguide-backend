@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seokjin.travelguide.WithMockCustomUser;
 import com.seokjin.travelguide.dto.request.trip.TripCreateRequest;
 import com.seokjin.travelguide.dto.response.trip.TripCreateResponse;
 import com.seokjin.travelguide.service.trip.TripService;
@@ -17,7 +18,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(TripController.class)
@@ -35,7 +35,7 @@ class TripControllerTest {
 
     @Test
     @DisplayName("tripCreate 요청 시 HTTP 200 상태 코드를 반환하고 생성된 ID를 반환한다.")
-    @WithMockUser
+    @WithMockCustomUser
     void tripCreateRequestCouldBeReturn200StatusAndGeneratedId() throws Exception {
         // given
         TripCreateRequest request = new TripCreateRequest();
