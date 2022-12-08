@@ -29,11 +29,11 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<Response> signin(@RequestBody @Valid SignInRequest request, HttpServletRequest httpRequest) {
-        String token = "Bearer " + authService.signIn(request);
+        String token = authService.signIn(request);
         log.info("{}님이 로그인 하였습니다. IP={}, TOKEN={}", request.getEmail(), httpRequest.getRemoteAddr(), token);
         return ResponseEntity.ok()
-                .header(AUTHORIZATION_HEADER, token)
-                .body(new SuccessResponse<>("200", "로그인 성공", token));
+                .header(AUTHORIZATION_HEADER, "Bearer " + token)
+                .body(new SuccessResponse<>("200", "로그인 성공", "Bearer " + token));
     }
 
     @PostMapping("/signup")
