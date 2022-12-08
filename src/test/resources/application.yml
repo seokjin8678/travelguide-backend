@@ -11,19 +11,3 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
-
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-
-#JPA log
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: DEBUG
-        type:
-          descriptor:
-            sql:
-              BasicBinder: TRACE
