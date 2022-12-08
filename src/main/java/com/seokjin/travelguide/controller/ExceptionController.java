@@ -61,6 +61,8 @@ public class ExceptionController {
                 .code("400")
                 .message("해당되는 계정이 없거나 비밀번호가 맞지 않습니다.")
                 .build();
+        response.addValidation("email", "해당되는 계정이 없거나 비밀번호가 맞지 않습니다.");
+        response.addValidation("password", "해당되는 계정이 없거나 비밀번호가 맞지 않습니다.");
         return ResponseEntity.status(400)
                 .body(response);
     }
