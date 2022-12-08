@@ -7,9 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -64,24 +62,6 @@ public class ExceptionController {
                 .message("해당되는 계정이 없거나 비밀번호가 맞지 않습니다.")
                 .build();
         return ResponseEntity.status(400)
-                .body(response);
-    }
-
-    @ResponseBody
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<Response> authenticationException(AuthenticationException e, HttpServletRequest request) {
-        log.info("{}에 대한 요청이 실패했습니다. (권한 없음) IP={}", request.getRequestURI(), request.getRemoteAddr());
-        ErrorResponse response = ErrorResponse.UNAUTHORIZED;
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(response);
-    }
-
-    @ResponseBody
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Response> accessDeniedException(AccessDeniedException e, HttpServletRequest request) {
-        log.info("{}에 대한 요청이 실패했습니다. (접근 제한) IP={}", request.getRequestURI(), request.getRemoteAddr());
-        ErrorResponse response = ErrorResponse.FORBIDDEN;
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(response);
     }
 }
