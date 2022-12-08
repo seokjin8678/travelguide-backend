@@ -1,5 +1,6 @@
-package com.seokjin.travelguide.dto.response;
+package com.seokjin.travelguide.dto.response.common;
 
+import com.seokjin.travelguide.dto.response.Response;
 import lombok.Builder;
 import lombok.Getter;
 

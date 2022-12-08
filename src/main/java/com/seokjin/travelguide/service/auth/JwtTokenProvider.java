@@ -1,4 +1,4 @@
-package com.seokjin.travelguide.service;
+package com.seokjin.travelguide.service.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

@@ -2,14 +2,13 @@ package com.seokjin.travelguide.controller;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seokjin.travelguide.domain.Member;
-import com.seokjin.travelguide.dto.request.SignInRequest;
-import com.seokjin.travelguide.dto.request.SignUpRequest;
-import com.seokjin.travelguide.service.AuthService;
+import com.seokjin.travelguide.domain.member.Member;
+import com.seokjin.travelguide.dto.request.auth.SignInRequest;
+import com.seokjin.travelguide.dto.request.auth.SignUpRequest;
+import com.seokjin.travelguide.service.auth.AuthService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

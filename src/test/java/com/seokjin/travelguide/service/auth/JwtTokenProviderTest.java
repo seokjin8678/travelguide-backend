@@ -1,8 +1,8 @@
-package com.seokjin.travelguide.service;
+package com.seokjin.travelguide.service.auth;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.seokjin.travelguide.domain.Role;
+import com.seokjin.travelguide.domain.member.Role;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

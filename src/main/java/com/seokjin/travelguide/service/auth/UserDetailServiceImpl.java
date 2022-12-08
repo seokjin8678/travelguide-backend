@@ -1,7 +1,7 @@
-package com.seokjin.travelguide.service;
+package com.seokjin.travelguide.service.auth;
 
-import com.seokjin.travelguide.domain.Member;
-import com.seokjin.travelguide.repository.MemberRepository;
+import com.seokjin.travelguide.domain.member.Member;
+import com.seokjin.travelguide.repository.member.MemberRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

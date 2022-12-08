@@ -1,6 +1,6 @@
 package com.seokjin.travelguide.config;
 
-import com.seokjin.travelguide.service.JwtTokenProvider;
+import com.seokjin.travelguide.service.auth.JwtTokenProvider;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

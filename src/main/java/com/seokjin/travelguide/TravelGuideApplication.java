@@ -1,6 +1,6 @@
 package com.seokjin.travelguide;
 
-import com.seokjin.travelguide.repository.MemberRepository;
+import com.seokjin.travelguide.repository.member.MemberRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

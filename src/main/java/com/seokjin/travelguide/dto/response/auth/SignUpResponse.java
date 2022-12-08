@@ -1,4 +1,4 @@
-package com.seokjin.travelguide.dto.response;
+package com.seokjin.travelguide.dto.response.auth;
 
 import lombok.Builder;
 import lombok.Getter;

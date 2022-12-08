@@ -2,13 +2,13 @@ package com.seokjin.travelguide.controller;
 
 import static com.seokjin.travelguide.config.JwtAuthorizationFilter.AUTHORIZATION_HEADER;
 
-import com.seokjin.travelguide.domain.Member;
-import com.seokjin.travelguide.dto.request.SignInRequest;
-import com.seokjin.travelguide.dto.request.SignUpRequest;
+import com.seokjin.travelguide.domain.member.Member;
+import com.seokjin.travelguide.dto.request.auth.SignInRequest;
+import com.seokjin.travelguide.dto.request.auth.SignUpRequest;
 import com.seokjin.travelguide.dto.response.Response;
-import com.seokjin.travelguide.dto.response.SignUpResponse;
-import com.seokjin.travelguide.dto.response.SuccessResponse;
-import com.seokjin.travelguide.service.AuthService;
+import com.seokjin.travelguide.dto.response.auth.SignUpResponse;
+import com.seokjin.travelguide.dto.response.common.SuccessResponse;
+import com.seokjin.travelguide.service.auth.AuthService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.seokjin.travelguide.domain;
+package com.seokjin.travelguide.domain.trip;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

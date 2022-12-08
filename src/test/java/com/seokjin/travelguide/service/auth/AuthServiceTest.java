@@ -1,12 +1,12 @@
-package com.seokjin.travelguide.service;
+package com.seokjin.travelguide.service.auth;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import com.seokjin.travelguide.domain.Member;
-import com.seokjin.travelguide.dto.request.SignUpRequest;
+import com.seokjin.travelguide.domain.member.Member;
+import com.seokjin.travelguide.dto.request.auth.SignUpRequest;
 import com.seokjin.travelguide.exception.InvalidRequestException;
-import com.seokjin.travelguide.repository.MemberRepository;
+import com.seokjin.travelguide.repository.member.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

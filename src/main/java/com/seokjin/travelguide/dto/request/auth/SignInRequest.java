@@ -1,4 +1,4 @@
-package com.seokjin.travelguide.dto.request;
+package com.seokjin.travelguide.dto.request.auth;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

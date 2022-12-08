@@ -1,5 +1,6 @@
-package com.seokjin.travelguide.domain;
+package com.seokjin.travelguide.domain.trip;
 
+import com.seokjin.travelguide.domain.member.Member;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;

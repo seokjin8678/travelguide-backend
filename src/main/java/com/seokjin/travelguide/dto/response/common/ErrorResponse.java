@@ -1,5 +1,6 @@
-package com.seokjin.travelguide.dto.response;
+package com.seokjin.travelguide.dto.response.common;
 
+import com.seokjin.travelguide.dto.response.Response;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Builder;

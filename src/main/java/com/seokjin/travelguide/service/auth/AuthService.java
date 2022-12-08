@@ -1,10 +1,10 @@
-package com.seokjin.travelguide.service;
+package com.seokjin.travelguide.service.auth;
 
-import com.seokjin.travelguide.domain.Member;
-import com.seokjin.travelguide.dto.request.SignInRequest;
-import com.seokjin.travelguide.dto.request.SignUpRequest;
+import com.seokjin.travelguide.domain.member.Member;
+import com.seokjin.travelguide.dto.request.auth.SignInRequest;
+import com.seokjin.travelguide.dto.request.auth.SignUpRequest;
 import com.seokjin.travelguide.exception.InvalidRequestException;
-import com.seokjin.travelguide.repository.MemberRepository;
+import com.seokjin.travelguide.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

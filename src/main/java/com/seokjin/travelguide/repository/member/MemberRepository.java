@@ -1,6 +1,6 @@
-package com.seokjin.travelguide.repository;
+package com.seokjin.travelguide.repository.member;
 
-import com.seokjin.travelguide.domain.Member;
+import com.seokjin.travelguide.domain.member.Member;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

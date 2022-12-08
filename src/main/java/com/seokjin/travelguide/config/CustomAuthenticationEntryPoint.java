@@ -1,7 +1,7 @@
 package com.seokjin.travelguide.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seokjin.travelguide.dto.response.ErrorResponse;
+import com.seokjin.travelguide.dto.response.common.ErrorResponse;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

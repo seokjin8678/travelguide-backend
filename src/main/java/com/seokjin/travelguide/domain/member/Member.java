@@ -1,4 +1,4 @@
-package com.seokjin.travelguide.domain;
+package com.seokjin.travelguide.domain.member;
 
 import java.util.ArrayList;
 import java.util.List;

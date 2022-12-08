@@ -1,8 +1,8 @@
-package com.seokjin.travelguide.repository;
+package com.seokjin.travelguide.repository.member;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.seokjin.travelguide.domain.Member;
+import com.seokjin.travelguide.domain.member.Member;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

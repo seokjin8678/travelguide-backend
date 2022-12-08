@@ -1,4 +1,4 @@
-package com.seokjin.travelguide.dto.request;
+package com.seokjin.travelguide.dto.request.auth;
 
 import com.seokjin.travelguide.exception.InvalidRequestException;
 import com.seokjin.travelguide.exception.Validation;

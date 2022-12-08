@@ -1,7 +1,7 @@
 package com.seokjin.travelguide;
 
-import com.seokjin.travelguide.domain.Member;
-import com.seokjin.travelguide.repository.MemberRepository;
+import com.seokjin.travelguide.domain.member.Member;
+import com.seokjin.travelguide.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;

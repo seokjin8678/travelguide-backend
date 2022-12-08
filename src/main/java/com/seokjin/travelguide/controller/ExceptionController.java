@@ -1,6 +1,6 @@
 package com.seokjin.travelguide.controller;
 
-import com.seokjin.travelguide.dto.response.ErrorResponse;
+import com.seokjin.travelguide.dto.response.common.ErrorResponse;
 import com.seokjin.travelguide.dto.response.Response;
 import com.seokjin.travelguide.exception.TripGuideException;
 import javax.servlet.http.HttpServletRequest;
