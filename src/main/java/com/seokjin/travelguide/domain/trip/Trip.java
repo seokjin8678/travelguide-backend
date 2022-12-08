@@ -34,13 +34,13 @@ public class Trip {
     private TripDetail tripDetail;
 
     @Column(nullable = false)
-    private String writer;
+    private String author;
 
     @Builder
-    public Trip(String title, String desc, TripDetail tripDetail, String writer) {
+    public Trip(String title, String desc, TripDetail tripDetail, String author) {
         this.title = title;
         this.desc = desc;
         this.tripDetail = tripDetail;
-        this.writer = writer;
+        this.author = author;
     }
 }
