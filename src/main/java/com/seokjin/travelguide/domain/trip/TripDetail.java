@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,4 +30,12 @@ public class TripDetail {
 
     @Column(nullable = false)
     private String longitude;
+
+    @Builder
+    public TripDetail(String contents, String location, String latitude, String longitude) {
+        this.contents = contents;
+        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }

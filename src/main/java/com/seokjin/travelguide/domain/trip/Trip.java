@@ -1,6 +1,5 @@
 package com.seokjin.travelguide.domain.trip;
 
-import com.seokjin.travelguide.domain.member.Member;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,9 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,6 +33,14 @@ public class Trip {
     @JoinColumn(name = "trip_detail_id")
     private TripDetail tripDetail;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Member writer;
+    @Column(nullable = false)
+    private String writer;
+
+    @Builder
+    public Trip(String title, String desc, TripDetail tripDetail, String writer) {
+        this.title = title;
+        this.desc = desc;
+        this.tripDetail = tripDetail;
+        this.writer = writer;
+    }
 }

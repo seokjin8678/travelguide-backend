@@ -1,6 +1,5 @@
 package com.seokjin.travelguide.domain.trip;
 
-import com.seokjin.travelguide.domain.member.Member;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,6 +30,14 @@ public class TripComment {
     @ManyToOne(fetch = FetchType.LAZY)
     private Trip trip;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Member writer;
+    @Column(nullable = false)
+    private String writer;
+
+    @Builder
+    public TripComment(String comment, int score, Trip trip, String writer) {
+        this.comment = comment;
+        this.score = score;
+        this.trip = trip;
+        this.writer = writer;
+    }
 }
