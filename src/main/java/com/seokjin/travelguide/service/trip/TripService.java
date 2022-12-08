@@ -6,10 +6,11 @@ import com.seokjin.travelguide.dto.request.trip.TripSearchRequest;
 import com.seokjin.travelguide.dto.response.trip.TripCreateResponse;
 import com.seokjin.travelguide.dto.response.trip.TripDetailResponse;
 import com.seokjin.travelguide.dto.response.trip.TripPreviewResponse;
+import com.seokjin.travelguide.exception.TripNotFoundException;
 import com.seokjin.travelguide.repository.trip.TripRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,12 +29,13 @@ public class TripService {
     }
 
     @Transactional(readOnly = true)
-    public List<TripPreviewResponse> getPreviews(TripSearchRequest request) {
-        return null;
+    public Page<TripPreviewResponse> getPreviews(TripSearchRequest request) {
+        return tripRepository.findTripPreviews(request.getPage(), request.getSize());
     }
 
     @Transactional(readOnly = true)
     public TripDetailResponse getDetail(Long tripId) {
-        return null;
+        return tripRepository.findTripDetail(tripId)
+                .orElseThrow(() -> new TripNotFoundException("여행 조회 오류: 존재하지 않는 ID"));
     }
 }

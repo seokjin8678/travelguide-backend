@@ -8,9 +8,9 @@ import com.seokjin.travelguide.dto.response.trip.TripCreateResponse;
 import com.seokjin.travelguide.dto.response.trip.TripDetailResponse;
 import com.seokjin.travelguide.dto.response.trip.TripPreviewResponse;
 import com.seokjin.travelguide.service.trip.TripService;
-import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -42,11 +42,11 @@ public class TripController {
 
     @GetMapping
     public ResponseEntity<Response> getTripPreviews(@ModelAttribute TripSearchRequest request) {
-        List<TripPreviewResponse> response = tripService.getPreviews(request);
+        Page<TripPreviewResponse> response = tripService.getPreviews(request);
         return ResponseEntity.ok()
                 .body(SuccessResponse.builder()
                         .code("200")
-                        .message(response.size() + "개의 결과입니다.")
+                        .message(response.getNumberOfElements() + "개의 결과입니다.")
                         .result(response)
                         .build());
     }

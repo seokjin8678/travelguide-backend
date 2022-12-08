@@ -17,6 +17,13 @@ spring:
       enabled: true
       path: /h2-console
 
+  data:
+    web:
+      pageable:
+        max-page-size: 1000
+        default-page-size: 8
+        one-indexed-parameters: true
+
 #JPA log
 logging:
   level:
