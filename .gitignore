@@ -42,3 +42,6 @@ src/main/generated/
 ### SECURITY ###
 src/main/resources/jwt.properties
 src/main/resources/ip.properties
+
+### DOCS ###
+src/main/resources/static/docs/index.html
