@@ -1,0 +1,42 @@
+= Travel Guide API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:sectlinks:
+
+== 인증
+
+=== 로그인
+
+*요청*
+
+include::{snippets}/signup/http-request.adoc[]
+
+include::{snippets}/signup/request-fields.adoc[]
+
+*응답*
+
+include::{snippets}/signup/http-response.adoc[]
+
+=== 회원가입
+
+*요청*
+
+include::{snippets}/signin/http-request.adoc[]
+
+*응답*
+
+include::{snippets}/signin/http-response.adoc[]
+
+== 여행
+
+=== 생성
+
+*요청*
+
+include::{snippets}/trip-create/http-request.adoc[]
+
+*응답*
+
+include::{snippets}/trip-create/http-response.adoc[]

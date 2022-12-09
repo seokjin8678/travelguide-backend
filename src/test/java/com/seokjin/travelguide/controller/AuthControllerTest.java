@@ -1,6 +1,8 @@
 package com.seokjin.travelguide.controller;
 
+import static com.seokjin.travelguide.RestDocsHelper.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -11,17 +13,22 @@ import com.seokjin.travelguide.dto.request.auth.SignUpRequest;
 import com.seokjin.travelguide.service.auth.AuthService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(AuthController.class)
 @AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "api.travelguide.com", uriPort = 443)
+@ExtendWith(RestDocumentationExtension.class)
 class AuthControllerTest {
 
     @MockBean
@@ -56,7 +63,19 @@ class AuthControllerTest {
                         .content(objectMapper.writeValueAsString(signUpRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result.email").value(signUpRequest.getEmail()))
-                .andExpect(jsonPath("$.result.nickname").value(signUpRequest.getNickname()));
+                .andExpect(jsonPath("$.result.nickname").value(signUpRequest.getNickname()))
+                .andDo(customDocument("signup",
+                        requestFields(
+                                fieldWithPath("email").description("이메일")
+                                        .attributes(constraint("30자 이내")),
+                                fieldWithPath("nickname").description("닉네임")
+                                        .attributes(constraint("2~10자 이내")),
+                                fieldWithPath("password").description("비밀번호")
+                                        .attributes(constraint("6~20자 이내")),
+                                fieldWithPath("confirmPassword").description("확인 비밀번호")
+                                        .attributes(constraint("6~20자 이내"))
+                        )
+                ));
     }
 
     @Test
@@ -161,7 +180,7 @@ class AuthControllerTest {
         signInRequest.setEmail("test@test.com");
         signInRequest.setPassword("123456");
 
-        doReturn("jwttoken")
+        doReturn("(JWT TOKEN)")
                 .when(authService)
                 .signIn(any(SignInRequest.class));
 
@@ -170,8 +189,16 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signInRequest)))
                 .andExpect(status().isOk())
-                .andExpect(header().string("Authorization", "Bearer jwttoken"))
-                .andExpect(jsonPath("$.result").value("Bearer jwttoken"));
+                .andExpect(header().string("Authorization", "Bearer (JWT TOKEN)"))
+                .andExpect(jsonPath("$.result").value("Bearer (JWT TOKEN)"))
+                .andDo(customDocument("signin",
+                        requestFields(
+                                fieldWithPath("email").description("이메일")
+                                        .attributes(constraint("30자 이내")),
+                                fieldWithPath("password").description("비밀번호")
+                                        .attributes(constraint("6~20자 이내"))
+                        )
+                ));
     }
 
     @Test

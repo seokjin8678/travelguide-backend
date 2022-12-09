@@ -1,6 +1,10 @@
 package com.seokjin.travelguide.controller;
 
+import static com.seokjin.travelguide.RestDocsHelper.constraint;
+import static com.seokjin.travelguide.RestDocsHelper.customDocument;
 import static org.mockito.Mockito.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -11,17 +15,22 @@ import com.seokjin.travelguide.dto.response.trip.TripCreateResponse;
 import com.seokjin.travelguide.service.trip.TripService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(TripController.class)
 @AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "api.travelguide.com", uriPort = 443)
+@ExtendWith(RestDocumentationExtension.class)
 class TripControllerTest {
 
     @MockBean
@@ -57,7 +66,20 @@ class TripControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result.tripId").value(1));
+                .andExpect(jsonPath("$.result.tripId").value(1))
+                .andDo(customDocument("trip-create",
+                        requestFields(
+                                fieldWithPath("title").description("제목"),
+                                fieldWithPath("desc").description("설명"),
+                                fieldWithPath("country").description("나라"),
+                                fieldWithPath("city").description("도시"),
+                                fieldWithPath("contents").description("내용"),
+                                fieldWithPath("latitude").description("위도")
+                                        .attributes(constraint("-90~90 이내")),
+                                fieldWithPath("longitude").description("경도")
+                                        .attributes(constraint("-180~180 이내"))
+                        )
+                ));
     }
 
     @ParameterizedTest
