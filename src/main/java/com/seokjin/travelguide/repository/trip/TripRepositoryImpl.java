@@ -5,6 +5,7 @@ import static com.seokjin.travelguide.domain.trip.QTripComment.*;
 import static com.seokjin.travelguide.domain.trip.QTripDetail.*;
 
 import com.seokjin.travelguide.domain.trip.Trip;
+import com.seokjin.travelguide.dto.request.trip.TripSearchRequest;
 import com.seokjin.travelguide.dto.response.trip.QTripDetailResponse;
 import com.seokjin.travelguide.dto.response.trip.QTripPreviewResponse;
 import com.seokjin.travelguide.dto.response.trip.TripDetailResponse;
@@ -45,8 +46,9 @@ public class TripRepositoryImpl extends Querydsl5RepositorySupport implements Tr
     }
 
     @Override
-    public Page<TripPreviewResponse> findTripPreviews(Integer page, Integer size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+    public Page<TripPreviewResponse> findTripPreviews(TripSearchRequest searchRequest) {
+        PageRequest pageRequest = PageRequest.of(searchRequest.getPage(), searchRequest.getSize(),
+                Sort.by("id").descending());
         return applyPagination(pageRequest,
                 query -> query
                         .select(new QTripPreviewResponse(

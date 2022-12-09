@@ -29,8 +29,8 @@ public class TripService {
     }
 
     @Transactional(readOnly = true)
-    public Page<TripPreviewResponse> getPreviews(TripSearchRequest request) {
-        return tripRepository.findTripPreviews(request.getPage(), request.getSize());
+    public Page<TripPreviewResponse> getPreviews(TripSearchRequest searchRequest) {
+        return tripRepository.findTripPreviews(searchRequest);
     }
 
     @Transactional(readOnly = true)
