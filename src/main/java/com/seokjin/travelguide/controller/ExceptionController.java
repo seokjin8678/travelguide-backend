@@ -22,8 +22,9 @@ public class ExceptionController {
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Response invalidRequestHandler(MethodArgumentNotValidException e, HttpServletRequest httpRequest) {
-        log.info("{}에 대한 요청이 실패했습니다. (검증 오류) IP={}", httpRequest.getRequestURI(), httpRequest.getRemoteAddr());
+    public ResponseEntity<Response> invalidRequestHandler(MethodArgumentNotValidException e,
+                                                          HttpServletRequest request) {
+        log.info("{}에 대한 요청이 실패했습니다. (검증 오류) IP={}", request.getRequestURI(), request.getRemoteAddr());
         ErrorResponse response = ErrorResponse.builder()
                 .code("400")
                 .message("잘못된 요청입니다.")
@@ -33,14 +34,15 @@ public class ExceptionController {
             response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
         }
 
-        return response;
+        return ResponseEntity.status(400)
+                .body(response);
     }
 
     @ResponseBody
     @ExceptionHandler(TripGuideException.class)
-    public ResponseEntity<Response> tripGuideException(TripGuideException e, HttpServletRequest httpRequest) {
-        log.info("{}에 대한 요청이 실패했습니다. ({}) IP={}", httpRequest.getRequestURI(), e.getLogMessage(),
-                httpRequest.getRemoteAddr());
+    public ResponseEntity<Response> tripGuideException(TripGuideException e, HttpServletRequest request) {
+        log.info("{}에 대한 요청이 실패했습니다. ({}) IP={}", request.getRequestURI(), e.getLogMessage(),
+                request.getRemoteAddr());
         int statusCode = e.getStatusCode();
 
         ErrorResponse body = ErrorResponse.builder()
