@@ -8,7 +8,6 @@ import com.seokjin.travelguide.dto.response.trip.TripDetailResponse;
 import com.seokjin.travelguide.dto.response.trip.TripPreviewResponse;
 import com.seokjin.travelguide.exception.TripNotFoundException;
 import com.seokjin.travelguide.repository.trip.TripRepository;
-import com.seokjin.travelguide.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
