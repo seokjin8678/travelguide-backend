@@ -30,8 +30,8 @@ public class TripRepositoryImpl extends Querydsl5RepositorySupport implements Tr
                         tripComment.score.avg(),
                         trip.desc,
                         tripDetail.contents,
-                        tripDetail.country,
-                        tripDetail.city,
+                        trip.country,
+                        trip.city,
                         trip.author,
                         tripDetail.latitude,
                         tripDetail.longitude
@@ -54,11 +54,10 @@ public class TripRepositoryImpl extends Querydsl5RepositorySupport implements Tr
                                 trip.title,
                                 tripComment.score.avg(),
                                 trip.desc,
-                                tripDetail.country,
-                                tripDetail.city,
+                                trip.country,
+                                trip.city,
                                 trip.author))
                         .from(trip)
-                        .innerJoin(trip.tripDetail, tripDetail)
                         .leftJoin(tripComment).on(trip.id.eq(tripComment.trip.id))
                         .groupBy(trip.id),
                 query -> query

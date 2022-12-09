@@ -39,8 +39,6 @@ public class TripCreateRequest {
     public Trip toEntity(String author) {
         TripDetail tripDetail = TripDetail.builder()
                 .contents(contents)
-                .country(country)
-                .city(city)
                 .latitude(latitude)
                 .longitude(longitude)
                 .build();
@@ -48,6 +46,8 @@ public class TripCreateRequest {
         return Trip.builder()
                 .title(title)
                 .desc(desc)
+                .country(country)
+                .city(city)
                 .author(author)
                 .tripDetail(tripDetail)
                 .build();

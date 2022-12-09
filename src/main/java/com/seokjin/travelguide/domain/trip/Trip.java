@@ -36,11 +36,19 @@ public class Trip {
     @Column(nullable = false)
     private String author;
 
+    @Column(nullable = false)
+    private String country;
+
+    @Column(nullable = false)
+    private String city;
+
     @Builder
-    public Trip(String title, String desc, TripDetail tripDetail, String author) {
+    public Trip(String title, String desc, TripDetail tripDetail, String author, String country, String city) {
         this.title = title;
         this.desc = desc;
         this.tripDetail = tripDetail;
         this.author = author;
+        this.country = country;
+        this.city = city;
     }
 }
