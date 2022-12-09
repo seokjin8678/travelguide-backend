@@ -44,14 +44,8 @@ public class TripController {
     }
 
     @GetMapping
-    public ResponseEntity<Response> getTripPreviews(@ModelAttribute TripSearchRequest request) {
-        Page<TripPreviewResponse> response = tripService.getPreviews(request);
-        return ResponseEntity.ok()
-                .body(SuccessResponse.builder()
-                        .code("200")
-                        .message(response.getNumberOfElements() + "개의 결과입니다.")
-                        .result(response)
-                        .build());
+    public Page<TripPreviewResponse> getTripPreviews(@ModelAttribute TripSearchRequest request) {
+        return tripService.getPreviews(request);
     }
 
     @GetMapping("/{tripId}")

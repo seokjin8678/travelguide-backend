@@ -183,9 +183,9 @@ class TripControllerTest {
         mockMvc.perform(get("/api/v1/trips")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result.content[0].title").value("title 10"))
-                .andExpect(jsonPath("$.result.content.size()").value(8))
-                .andExpect(jsonPath("$.result.totalElements").value(10))
+                .andExpect(jsonPath("$.content[0].title").value("title 10"))
+                .andExpect(jsonPath("$.content.size()").value(8))
+                .andExpect(jsonPath("$.totalElements").value(10))
                 .andDo(customDocument("trip-previews-inquiry",
                         requestParameters(
                                 parameterWithName("page").description("기본값 1").optional(),
