@@ -42,7 +42,7 @@ class MemberRepositoryTest {
         // when
         memberRepository.save(member);
         em.clear();
-        Member findMember = memberRepository.findById(1L).get();
+        Member findMember = memberRepository.findById(member.getId()).get();
 
         // then
         assertThat(findMember.getEmail())
