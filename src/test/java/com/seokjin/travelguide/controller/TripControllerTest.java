@@ -43,9 +43,9 @@ class TripControllerTest {
     MockMvc mockMvc;
 
     @Test
-    @DisplayName("tripCreate 요청 시 HTTP 200 상태 코드를 반환하고 생성된 ID를 반환한다.")
+    @DisplayName("/api/v1/trips로 POST 요청 시 HTTP 200 상태 코드와 생성된 ID를 반환한다.")
     @WithMockCustomUser
-    void tripCreateRequestCouldBeReturn200StatusAndGeneratedId() throws Exception {
+    void tripsPostRequestCouldBeReturn200StatusAndGeneratedId() throws Exception {
         // given
         TripCreateRequest request = new TripCreateRequest();
         request.setTitle("test title");
@@ -83,9 +83,9 @@ class TripControllerTest {
     }
 
     @ParameterizedTest
-    @DisplayName("tripCreate 요청 시 위도는 -90 ~ 90 사이의 값이어야 한다.")
+    @DisplayName("/api/v1/trips로 POST 요청 시 위도는 -90 ~ 90 사이의 값이어야 한다.")
     @ValueSource(strings = {"-90.1", "-91", "90.1", "91"})
-    void tripCreateRequestByLatitudeCouldBeMinus90ToPlus90(String latitude) throws Exception {
+    void tripsPostRequestByLatitudeCouldBeMinus90ToPlus90(String latitude) throws Exception {
         // given
         TripCreateRequest request = new TripCreateRequest();
         request.setTitle("test title");
@@ -104,9 +104,9 @@ class TripControllerTest {
     }
 
     @ParameterizedTest
-    @DisplayName("tripCreate 요청 시 경도는 -180 ~ 180 사이의 값이어야 한다.")
+    @DisplayName("/api/v1/trips로 POST 요청 시 경도는 -180 ~ 180 사이의 값이어야 한다.")
     @ValueSource(strings = {"-180.1", "-181", "180.1", "181"})
-    void tripCreateRequestByLongitudeCouldBeMinus180ToPlus180(String longitude) throws Exception {
+    void tripsPostRequestByLongitudeCouldBeMinus180ToPlus180(String longitude) throws Exception {
         // given
         TripCreateRequest request = new TripCreateRequest();
         request.setTitle("test title");
@@ -125,8 +125,8 @@ class TripControllerTest {
     }
 
     @Test
-    @DisplayName("tripCreate 요청 시 모든 필드는 필수다.")
-    void tripCreateRequestByAllFieldCouldBeNotEmpty() throws Exception {
+    @DisplayName("/api/v1/trips로 POST 요청 시 모든 필드는 필수다.")
+    void tripsPostRequestByAllFieldCouldBeNotEmpty() throws Exception {
         // given
         TripCreateRequest request = new TripCreateRequest();
 

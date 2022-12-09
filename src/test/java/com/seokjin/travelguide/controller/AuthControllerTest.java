@@ -41,8 +41,8 @@ class AuthControllerTest {
     MockMvc mockMvc;
 
     @Test
-    @DisplayName("회원가입이 정상적으로 되어야 한다.")
-    void signUpCouldBeSuccess() throws Exception {
+    @DisplayName("/api/v1/auth/signup로 POST 요청 시 HTTP 200 상태 코드와 회원가입이 정상적으로 되어야 한다.")
+    void signupPostRequestCouldBeReturn200StatusAndSignUpSuccess() throws Exception {
         // given
         SignUpRequest signUpRequest = new SignUpRequest();
         signUpRequest.setEmail("test@test.com");
@@ -79,8 +79,8 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("회원가입을 할 때 이메일이 이메일 형식이어야 한다.")
-    void signUpByEmailCouldBeEmailFormat() throws Exception {
+    @DisplayName("/api/v1/auth/signup로 POST 요청 시 이메일이 이메일 형식이어야 한다.")
+    void signupPostRequestByEmailCouldBeEmailFormat() throws Exception {
         // given
         SignUpRequest signUpRequest = new SignUpRequest();
         signUpRequest.setEmail("test");
@@ -97,8 +97,8 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("회원가입을 할 때 이메일의 길이는 30자리 이내여야 한다.")
-    void signUpByNicknameLengthCouldBeMinTo30() throws Exception {
+    @DisplayName("/api/v1/auth/signup로 POST 요청 시 이메일의 길이는 30자리 이내여야 한다.")
+    void signupPostRequestByNicknameLengthCouldBeMinTo30() throws Exception {
         // given
         String email = "12345678901234567890@123456.com"; // 31
         SignUpRequest signUpRequest = new SignUpRequest();
@@ -116,9 +116,9 @@ class AuthControllerTest {
     }
 
     @ParameterizedTest
-    @DisplayName("회원가입을 할 때 닉네임의 길이는 2자리에서 10자리 사이여야 한다.")
+    @DisplayName("/api/v1/auth/signup로 POST 요청 시 닉네임의 길이는 2자리에서 10자리 사이여야 한다.")
     @ValueSource(strings = {"t", "1234567890a"})
-    void signUpByEmailLengthCouldBe2To10(String nickname) throws Exception {
+    void signupPostRequestByEmailLengthCouldBe2To10(String nickname) throws Exception {
         // given
         SignUpRequest signUpRequest = new SignUpRequest();
         signUpRequest.setEmail("test@test.com");
@@ -135,9 +135,9 @@ class AuthControllerTest {
     }
 
     @ParameterizedTest
-    @DisplayName("회원가입을 할 때 비밀번호의 길이는 6자리에서 20자리 사이여야 한다.")
+    @DisplayName("/api/v1/auth/signup로 POST 요청 시 비밀번호의 길이는 6자리에서 20자리 사이여야 한다.")
     @ValueSource(strings = {"12345", "123456789012345678901"})
-    void signUpByPasswordLengthCouldBe6To20(String password) throws Exception {
+    void signupPostRequestByPasswordLengthCouldBe6To20(String password) throws Exception {
         // given
         SignUpRequest signUpRequest = new SignUpRequest();
         signUpRequest.setEmail("test@test.com");
@@ -154,8 +154,8 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("회원가입을 할 때 비밀번호와 확인 비밀번호는 같아야 한다.")
-    void signUpByPasswordAndConfirmPasswordCouldBeSame() throws Exception {
+    @DisplayName("/api/v1/auth/signup로 POST 요청 시 비밀번호와 확인 비밀번호는 같아야 한다.")
+    void signupPostRequestByPasswordAndConfirmPasswordCouldBeSame() throws Exception {
         // given
         SignUpRequest signUpRequest = new SignUpRequest();
         signUpRequest.setEmail("test@test.com");
@@ -173,8 +173,8 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("로그인이 정상적으로 되어야 한다.")
-    void signInCouldBeSuccess() throws Exception {
+    @DisplayName("/api/v1/auth/signin으로 POST 요청 시 HTTP 200 상태 코드와 로그인이 정상적으로 되어야 한다.")
+    void signinPostRequestCouldBeCouldBeReturn200StatusAndSignInSuccess() throws Exception {
         // given
         SignInRequest signInRequest = new SignInRequest();
         signInRequest.setEmail("test@test.com");
@@ -202,8 +202,8 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("로그인을 할 때 이메일이 이메일 형식이어야 한다.")
-    void signInByEmailCouldBeEmailFormat() throws Exception {
+    @DisplayName("/api/v1/auth/signin으로 POST 요청 시 이메일이 이메일 형식이어야 한다.")
+    void signinPostRequestByEmailCouldBeEmailFormat() throws Exception {
         // given
         SignInRequest signInRequest = new SignInRequest();
         signInRequest.setEmail("test");
@@ -218,8 +218,8 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("로그인을 할 때 이메일의 길이는 30자리 이내여야 한다.")
-    void signInByEmailLengthCouldBeMinTo30() throws Exception {
+    @DisplayName("/api/v1/auth/signin으로 POST 요청 시 이메일의 길이는 30자리 이내여야 한다.")
+    void signinPostRequestByEmailLengthCouldBeMinTo30() throws Exception {
         // given
         String email = "12345678901234567890@123456.com"; // 31
         SignInRequest signInRequest = new SignInRequest();
@@ -235,9 +235,9 @@ class AuthControllerTest {
     }
 
     @ParameterizedTest
-    @DisplayName("로그인을 할 때 비밀번호의 길이는 6자리에서 20자리 사이여야 한다.")
+    @DisplayName("/api/v1/auth/signin으로 POST 요청 시 비밀번호의 길이는 6자리에서 20자리 사이여야 한다.")
     @ValueSource(strings = {"12345", "123456789012345678901"})
-    void signInByPasswordLengthCouldBeMinTo30(String password) throws Exception {
+    void signinPostRequestByPasswordLengthCouldBeMinTo30(String password) throws Exception {
         // given
         SignInRequest signInRequest = new SignInRequest();
         signInRequest.setEmail("test@test.com");
