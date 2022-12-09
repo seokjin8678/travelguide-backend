@@ -6,11 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class SuccessResponse<T> extends Response {
-    private T result;
-
-    public SuccessResponse(String code, String message) {
-        super(code, message);
-    }
+    private final T result;
 
     @Builder
     public SuccessResponse(String code, String message, T result) {
