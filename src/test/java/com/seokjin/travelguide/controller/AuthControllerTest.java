@@ -2,9 +2,10 @@ package com.seokjin.travelguide.controller;
 
 import static com.seokjin.travelguide.RestDocsHelper.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seokjin.travelguide.domain.member.Member;
@@ -21,7 +22,6 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -59,7 +59,7 @@ class AuthControllerTest {
 
         // expect
         mockMvc.perform(post("/api/v1/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signUpRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result.email").value(signUpRequest.getEmail()))
@@ -90,7 +90,7 @@ class AuthControllerTest {
 
         // expect
         mockMvc.perform(post("/api/v1/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signUpRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.validation.email").exists());
@@ -109,7 +109,7 @@ class AuthControllerTest {
 
         // expect
         mockMvc.perform(post("/api/v1/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signUpRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.validation.email").exists());
@@ -128,7 +128,7 @@ class AuthControllerTest {
 
         // expect
         mockMvc.perform(post("/api/v1/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signUpRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.validation.nickname").exists());
@@ -147,7 +147,7 @@ class AuthControllerTest {
 
         // expect
         mockMvc.perform(post("/api/v1/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signUpRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.validation.password").exists());
@@ -165,7 +165,7 @@ class AuthControllerTest {
 
         // expect
         mockMvc.perform(post("/api/v1/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signUpRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.validation.password").exists())
@@ -186,7 +186,7 @@ class AuthControllerTest {
 
         // expect
         mockMvc.perform(post("/api/v1/auth/signin")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signInRequest)))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Authorization", "Bearer (JWT TOKEN)"))
@@ -197,6 +197,11 @@ class AuthControllerTest {
                                         .attributes(constraint("30자 이내")),
                                 fieldWithPath("password").description("비밀번호")
                                         .attributes(constraint("6~20자 이내"))
+                        ),
+                        responseFields(
+                                fieldWithPath("code").description("HTTP Status"),
+                                fieldWithPath("message").description("결과 메시지"),
+                                fieldWithPath("result").description("JWT 토큰")
                         )
                 ));
     }
@@ -211,7 +216,7 @@ class AuthControllerTest {
 
         // expect
         mockMvc.perform(post("/api/v1/auth/signin")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signInRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.validation.email").exists());
@@ -228,7 +233,7 @@ class AuthControllerTest {
 
         // expect
         mockMvc.perform(post("/api/v1/auth/signin")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signInRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.validation.email").exists());
@@ -245,7 +250,7 @@ class AuthControllerTest {
 
         // expect
         mockMvc.perform(post("/api/v1/auth/signin")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signInRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.validation.password").exists());

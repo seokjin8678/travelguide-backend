@@ -2,17 +2,26 @@ package com.seokjin.travelguide.controller;
 
 import static com.seokjin.travelguide.RestDocsHelper.constraint;
 import static com.seokjin.travelguide.RestDocsHelper.customDocument;
+import static java.util.Comparator.*;
+import static java.util.stream.Collectors.toList;
 import static org.mockito.Mockito.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.http.MediaType.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seokjin.travelguide.WithMockCustomUser;
 import com.seokjin.travelguide.dto.request.trip.TripCreateRequest;
+import com.seokjin.travelguide.dto.request.trip.TripSearchRequest;
 import com.seokjin.travelguide.dto.response.trip.TripCreateResponse;
+import com.seokjin.travelguide.dto.response.trip.TripDetailResponse;
+import com.seokjin.travelguide.dto.response.trip.TripPreviewResponse;
 import com.seokjin.travelguide.service.trip.TripService;
+import java.util.List;
+import java.util.stream.LongStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +32,9 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -63,7 +74,7 @@ class TripControllerTest {
 
         // expect
         mockMvc.perform(post("/api/v1/trips")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result.tripId").value(1))
@@ -98,7 +109,7 @@ class TripControllerTest {
 
         // expect
         mockMvc.perform(post("/api/v1/trips")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
     }
@@ -119,7 +130,7 @@ class TripControllerTest {
 
         // expect
         mockMvc.perform(post("/api/v1/trips")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
     }
@@ -132,7 +143,7 @@ class TripControllerTest {
 
         // expect
         mockMvc.perform(post("/api/v1/trips")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.validation.title").exists())
@@ -142,5 +153,90 @@ class TripControllerTest {
                 .andExpect(jsonPath("$.validation.city").exists())
                 .andExpect(jsonPath("$.validation.latitude").exists())
                 .andExpect(jsonPath("$.validation.longitude").exists());
+    }
+
+    @Test
+    @DisplayName("/api/v1/trips로 GET 요청 시 요청 시 HTTP 200 상태 코드와 TripPreviews가 반환되어야 한다.")
+    void tripsGetRequestCouldBeReturn200StatusAndTripPreviews() throws Exception {
+        // given
+        TripSearchRequest tripSearchRequest = new TripSearchRequest();
+        PageRequest pageable = PageRequest.of(tripSearchRequest.getPage(), tripSearchRequest.getSize());
+        List<TripPreviewResponse> tripPreviews = LongStream.rangeClosed(1, 10)
+                .mapToObj(i -> TripPreviewResponse.builder()
+                        .id(i)
+                        .title("title " + i)
+                        .score(0)
+                        .desc("desc " + i)
+                        .country("county " + i)
+                        .city("city " + i)
+                        .author("author " + i)
+                        .build())
+                .sorted(comparing(TripPreviewResponse::getId).reversed())
+                .collect(toList());
+        Page<TripPreviewResponse> tripPreviewPage = new PageImpl<>(tripPreviews.subList(0, 8), pageable,
+                tripPreviews.size());
+
+        doReturn(tripPreviewPage).when(tripService)
+                .getPreviews(any(TripSearchRequest.class));
+
+        // expect
+        mockMvc.perform(get("/api/v1/trips")
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.content[0].title").value("title 10"))
+                .andExpect(jsonPath("$.result.content.size()").value(8))
+                .andExpect(jsonPath("$.result.totalElements").value(10))
+                .andDo(customDocument("trip-previews-inquiry",
+                        requestParameters(
+                                parameterWithName("page").description("기본값 1").optional(),
+                                parameterWithName("size").description("기본값 8").optional()
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("/api/v1/trips/{tripId}로 GET 요청 시 요청 시 HTTP 200 상태 코드와 TripDetail이 반환되어야 한다.")
+    void tripsWithTripIdGetRequestCouldBeReturn200StatusAndTripDetail() throws Exception {
+        // given
+        TripDetailResponse tripDetailResponse = TripDetailResponse.builder()
+                .id(1L)
+                .title("title")
+                .desc("desc")
+                .country("south korea")
+                .city("seoul")
+                .author("author")
+                .latitude("37.532600")
+                .longitude("127.024612")
+                .score(0)
+                .contents("contents")
+                .build();
+        doReturn(tripDetailResponse).when(tripService)
+                .getDetail(any(Long.class));
+
+        // expect
+        mockMvc.perform(get("/api/v1/trips/{tripId}", 1L)
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.title").value("title"))
+                .andExpect(jsonPath("$.result.city").value("seoul"))
+                .andDo(customDocument("trip-detail-inquiry",
+                        pathParameters(
+                                parameterWithName("tripId").description("여행 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").description("HTTP Status"),
+                                fieldWithPath("message").description("결과 메시지"),
+                                fieldWithPath("result.id").description("ID"),
+                                fieldWithPath("result.title").description("제목"),
+                                fieldWithPath("result.desc").description("설명"),
+                                fieldWithPath("result.country").description("나라"),
+                                fieldWithPath("result.city").description("도시"),
+                                fieldWithPath("result.author").description("작성자"),
+                                fieldWithPath("result.latitude").description("위도"),
+                                fieldWithPath("result.longitude").description("경도"),
+                                fieldWithPath("result.score").description("평점"),
+                                fieldWithPath("result.contents").description("내용")
+                        )
+                ));
     }
 }

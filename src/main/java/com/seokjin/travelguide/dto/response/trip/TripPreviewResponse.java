@@ -1,6 +1,7 @@
 package com.seokjin.travelguide.dto.response.trip;
 
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ public class TripPreviewResponse {
     private String city;
     private String author; // nickname
 
+    @Builder
     @QueryProjection
     public TripPreviewResponse(Long id, String title, double score, String desc, String country, String city,
                                String author) {

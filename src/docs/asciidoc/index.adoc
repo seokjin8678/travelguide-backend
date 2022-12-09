@@ -12,7 +12,6 @@
 *요청*
 
 include::{snippets}/signup/http-request.adoc[]
-
 include::{snippets}/signup/request-fields.adoc[]
 
 *응답*
@@ -24,10 +23,12 @@ include::{snippets}/signup/http-response.adoc[]
 *요청*
 
 include::{snippets}/signin/http-request.adoc[]
+include::{snippets}/signin/request-fields.adoc[]
 
 *응답*
 
 include::{snippets}/signin/http-response.adoc[]
+include::{snippets}/signin/response-fields.adoc[]
 
 == 여행
 
@@ -36,7 +37,30 @@ include::{snippets}/signin/http-response.adoc[]
 *요청*
 
 include::{snippets}/trip-create/http-request.adoc[]
+include::{snippets}/trip-create/request-fields.adoc[]
 
 *응답*
 
 include::{snippets}/trip-create/http-response.adoc[]
+
+=== 프리뷰 조회
+
+*요청*
+
+include::{snippets}/trip-previews-inquiry/http-request.adoc[]
+include::{snippets}/trip-previews-inquiry/request-parameters.adoc[]
+
+*응답*
+
+include::{snippets}/trip-previews-inquiry/http-response.adoc[]
+
+=== 상세 조회
+
+*요청*
+
+include::{snippets}/trip-detail-inquiry/http-request.adoc[]
+include::{snippets}/trip-detail-inquiry/path-parameters.adoc[]
+
+*응답*
+include::{snippets}/trip-detail-inquiry/http-response.adoc[]
+include::{snippets}/trip-detail-inquiry/response-fields.adoc[]
