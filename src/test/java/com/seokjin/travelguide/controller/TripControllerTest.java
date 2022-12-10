@@ -14,8 +14,11 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seokjin.travelguide.WithMockCustomUser;
+import com.seokjin.travelguide.dto.request.trip.TripCommentCreateRequest;
+import com.seokjin.travelguide.dto.request.trip.TripCommentSearchRequest;
 import com.seokjin.travelguide.dto.request.trip.TripCreateRequest;
 import com.seokjin.travelguide.dto.request.trip.TripSearchRequest;
+import com.seokjin.travelguide.dto.response.trip.TripCommentResponse;
 import com.seokjin.travelguide.dto.response.trip.TripCreateResponse;
 import com.seokjin.travelguide.dto.response.trip.TripDetailResponse;
 import com.seokjin.travelguide.dto.response.trip.TripPreviewResponse;
@@ -111,7 +114,8 @@ class TripControllerTest {
         mockMvc.perform(post("/api/v1/trips")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.validation.latitude").exists());
     }
 
     @ParameterizedTest
@@ -132,7 +136,8 @@ class TripControllerTest {
         mockMvc.perform(post("/api/v1/trips")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.validation.longitude").exists());
     }
 
     @Test
@@ -238,5 +243,87 @@ class TripControllerTest {
                                 fieldWithPath("result.contents").description("내용")
                         )
                 ));
+    }
+
+    @Test
+    @DisplayName("/api/v1/trips/{tripId}/comments로 GET 요청 시 요청 시 HTTP 200 상태 코드와 TripComments가 반환되어야 한다.")
+    void tripIdWithCommentsGetRequestCouldBeReturn200StatusAndTripCommentResponse() throws Exception {
+        // given
+        TripCommentSearchRequest tripCommentSearchRequest = new TripCommentSearchRequest();
+        PageRequest pageable = PageRequest.of(tripCommentSearchRequest.getPage(), tripCommentSearchRequest.getSize());
+        List<TripCommentResponse> tripCommentResponses = LongStream.rangeClosed(1, 15)
+                .mapToObj(i -> TripCommentResponse.builder()
+                        .id(i)
+                        .comment("comment " + i)
+                        .author("author " + i)
+                        .score((int) (i % 6))
+                        .build())
+                .sorted(comparing(TripCommentResponse::getId).reversed())
+                .collect(toList());
+        Page<TripCommentResponse> tripCommentResponsePage = new PageImpl<>(tripCommentResponses.subList(0, 10),
+                pageable,
+                tripCommentResponses.size());
+
+        doReturn(tripCommentResponsePage).when(tripService)
+                .getComments(any(Long.class), any(TripCommentSearchRequest.class));
+
+        // expect
+        mockMvc.perform(get("/api/v1/trips/{tripId}/comments", 1L)
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].comment").value("comment 15"))
+                .andExpect(jsonPath("$.content.size()").value(10))
+                .andExpect(jsonPath("$.totalElements").value(15))
+                .andDo(customDocument("trip-comments-inquiry",
+                        requestParameters(
+                                parameterWithName("page").description("기본값 1").optional(),
+                                parameterWithName("size").description("기본값 10").optional()
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("/api/v1/trips/{tripId}/comments로 POST 요청 시 요청 시 HTTP 200 상태 코드와 생성 메시지가 반환되어야 한다.")
+    @WithMockCustomUser
+    void tripIdWithCommentsPostRequestCouldBeReturn200StatusAndSuccessMessage() throws Exception {
+        // given
+        TripCommentCreateRequest request = new TripCommentCreateRequest();
+        request.setComment("comment");
+        request.setScore(5);
+
+        doReturn(1L).when(tripService)
+                .createComment(any(TripCommentCreateRequest.class), any(Long.class), any(String.class));
+
+        // expect
+        mockMvc.perform(post("/api/v1/trips/{tripId}/comments", 1L)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andDo(customDocument("trip-comment-create",
+                        pathParameters(
+                                parameterWithName("tripId").description("여행 ID")
+                        ),
+                        requestFields(
+                                fieldWithPath("comment").description("코멘트 내용"),
+                                fieldWithPath("score").description("점수")
+                                        .attributes(constraint("1~5 이내"))
+                        )));
+    }
+
+    @ParameterizedTest
+    @DisplayName("/api/v1/trips/{tripId}/comments로 GET 요청 시 요청 시 HTTP 200 상태 코드와 생성 메시지가 반환되어야 한다.")
+    @ValueSource(ints = {-1, 6})
+    void tripIdWithCommentsPostRequestByScoreCouldBe0To5(int score) throws Exception {
+        // given
+        TripCommentCreateRequest request = new TripCommentCreateRequest();
+        request.setComment("comment");
+        request.setScore(score);
+
+        // expect
+        mockMvc.perform(post("/api/v1/trips/{tripId}/comments", 1L)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.validation.score").exists());
     }
 }

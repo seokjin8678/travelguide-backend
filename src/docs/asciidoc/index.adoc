@@ -64,3 +64,27 @@ include::{snippets}/trip-detail-inquiry/path-parameters.adoc[]
 *응답*
 include::{snippets}/trip-detail-inquiry/http-response.adoc[]
 include::{snippets}/trip-detail-inquiry/response-fields.adoc[]
+
+== 여행 코멘트
+
+=== 생성
+
+*요청*
+
+include::{snippets}/trip-comment-create/http-request.adoc[]
+include::{snippets}/trip-comment-create/path-parameters.adoc[]
+include::{snippets}/trip-comment-create/request-fields.adoc[]
+
+*응답*
+
+include::{snippets}/trip-comment-create/http-response.adoc[]
+
+=== 조회
+
+*요청*
+
+include::{snippets}/trip-comments-inquiry/http-request.adoc[]
+include::{snippets}/trip-comments-inquiry/request-parameters.adoc[]
+
+*응답*
+include::{snippets}/trip-comments-inquiry/response-body.adoc[]
