@@ -3,6 +3,7 @@ package com.seokjin.travelguide.repository.trip;
 import static org.assertj.core.api.Assertions.*;
 
 import com.seokjin.travelguide.domain.trip.Trip;
+import com.seokjin.travelguide.domain.trip.TripComment;
 import com.seokjin.travelguide.domain.trip.TripDetail;
 import com.seokjin.travelguide.dto.request.trip.TripSearchRequest;
 import com.seokjin.travelguide.dto.response.trip.TripDetailResponse;
@@ -21,6 +22,9 @@ class TripRepositoryTest {
 
     @Autowired
     TripRepository tripRepository;
+
+    @Autowired
+    TripCommentRepository tripCommentRepository;
 
     @Autowired
     EntityManager em;
@@ -87,7 +91,7 @@ class TripRepositoryTest {
         tripRepository.save(trip);
 
         // when
-        TripDetailResponse tripDetailResponse = tripRepository.findTripDetail(1L).get();
+        TripDetailResponse tripDetailResponse = tripRepository.findTripDetail(trip.getId()).get();
 
         // then
         assertThat(tripDetailResponse.getTitle())
@@ -98,6 +102,50 @@ class TripRepositoryTest {
                 .isEqualTo(trip.getTripDetail().getLatitude());
         assertThat(tripDetailResponse.getLongitude())
                 .isEqualTo(trip.getTripDetail().getLongitude());
+    }
+
+    @Test
+    @DisplayName("TripPreviewResponse를 조회할 때 평점이 정확하게 계산되어야 한다.")
+    void findTripPreviewResponseCouldBeScoreAccuratelyCalculate() {
+        // given
+        Trip trip1 = trip();
+        Trip trip2 = trip();
+        tripCommentRepository.save(tripComment(trip1, 2));
+        tripCommentRepository.save(tripComment(trip1, 3));
+        tripCommentRepository.save(tripComment(trip1, 5));
+        tripCommentRepository.save(tripComment(trip2, 5));
+        tripCommentRepository.save(tripComment(trip2, 5));
+        tripCommentRepository.save(tripComment(trip2, 5));
+        tripRepository.save(trip1);
+        tripRepository.save(trip2);
+        TripSearchRequest searchRequest = new TripSearchRequest();
+
+        // when
+        Page<TripPreviewResponse> tripPreviews = tripRepository.findTripPreviews(searchRequest);
+
+        // then
+        assertThat(tripPreviews.getContent().get(0).getScore())
+                .isEqualTo(5);
+        assertThat(tripPreviews.getContent().get(1).getScore())
+                .isEqualTo(10.0 / 3);
+    }
+
+    @Test
+    @DisplayName("TripDetailResponse를 조회할 때 평점이 정확하게 계산되어야 한다.")
+    void findTripDetailResponseCouldBeScoreAccuratelyCalculate() {
+        // given
+        Trip trip = trip();
+        tripCommentRepository.save(tripComment(trip, 2));
+        tripCommentRepository.save(tripComment(trip, 3));
+        tripCommentRepository.save(tripComment(trip, 5));
+        tripRepository.save(trip);
+
+        // when
+        TripDetailResponse tripDetailResponse = tripRepository.findTripDetail(trip.getId()).get();
+
+        // then
+        assertThat(tripDetailResponse.getScore())
+                .isEqualTo(10.0 / 3);
     }
 
     private Trip trip() {
@@ -114,6 +162,15 @@ class TripRepositoryTest {
                 .country("대한민국")
                 .city("서울")
                 .tripDetail(tripDetail)
+                .build();
+    }
+
+    private TripComment tripComment(Trip trip, int score) {
+        return TripComment.builder()
+                .comment("comment")
+                .trip(trip)
+                .score(score)
+                .author("author")
                 .build();
     }
 }

@@ -1,5 +1,9 @@
 package com.seokjin.travelguide.controller;
 
+import com.seokjin.travelguide.dto.request.trip.TripCommentCreateRequest;
+import com.seokjin.travelguide.dto.request.trip.TripCommentSearchRequest;
+import com.seokjin.travelguide.dto.response.common.SimpleResponse;
+import com.seokjin.travelguide.dto.response.trip.TripCommentResponse;
 import com.seokjin.travelguide.service.auth.CustomUser;
 import com.seokjin.travelguide.dto.request.trip.TripCreateRequest;
 import com.seokjin.travelguide.dto.request.trip.TripSearchRequest;
@@ -57,5 +61,20 @@ public class TripController {
                         .message("여행 ID=" + tripId + " 의 결과입니다.")
                         .result(response)
                         .build());
+    }
+
+    @GetMapping("/{tripId}/comments")
+    public Page<TripCommentResponse> getTripComments(@PathVariable Long tripId,
+                                                     @ModelAttribute TripCommentSearchRequest request) {
+        return tripService.getComments(tripId, request);
+    }
+
+    @PostMapping("/{tripId}/comments")
+    public ResponseEntity<Response> createTripComment(@PathVariable Long tripId, @RequestBody @Valid
+    TripCommentCreateRequest request, @AuthenticationPrincipal CustomUser user) {
+        Long commentId = tripService.createComment(request, tripId, user.getNickname());
+        log.info("{} 계정이 코멘트를 작성했습니다. TripId={}, CommentId={}", user.getUsername(), tripId, commentId);
+        return ResponseEntity.ok()
+                .body(SimpleResponse.of("200", "댓글이 작성되었습니다."));
     }
 }
