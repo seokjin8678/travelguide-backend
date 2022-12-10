@@ -33,7 +33,7 @@ public class TripController {
     @PostMapping
     public ResponseEntity<Response> createTrip(@RequestBody @Valid TripCreateRequest request,
                                                @AuthenticationPrincipal CustomUser user) {
-        TripCreateResponse response = tripService.create(request, user.getNickname());
+        TripCreateResponse response = tripService.createTrip(request, user.getNickname());
         log.info("{} 계정이 새로운 여행을 생성했습니다. ID={}", user.getUsername(), response.getTripId());
         return ResponseEntity.ok()
                 .body(SuccessResponse.builder()
@@ -45,12 +45,12 @@ public class TripController {
 
     @GetMapping
     public Page<TripPreviewResponse> getTripPreviews(@ModelAttribute TripSearchRequest request) {
-        return tripService.getPreviews(request);
+        return tripService.getTripPreviews(request);
     }
 
     @GetMapping("/{tripId}")
     public ResponseEntity<Response> getTripDetail(@PathVariable Long tripId) {
-        TripDetailResponse response = tripService.getDetail(tripId);
+        TripDetailResponse response = tripService.getTripDetail(tripId);
         return ResponseEntity.ok()
                 .body(SuccessResponse.builder()
                         .code("200")

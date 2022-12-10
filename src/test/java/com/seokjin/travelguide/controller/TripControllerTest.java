@@ -70,7 +70,7 @@ class TripControllerTest {
         TripCreateResponse response = new TripCreateResponse(1L);
 
         doReturn(response).when(tripService)
-                .create(any(TripCreateRequest.class), any(String.class));
+                .createTrip(any(TripCreateRequest.class), any(String.class));
 
         // expect
         mockMvc.perform(post("/api/v1/trips")
@@ -177,7 +177,7 @@ class TripControllerTest {
                 tripPreviews.size());
 
         doReturn(tripPreviewPage).when(tripService)
-                .getPreviews(any(TripSearchRequest.class));
+                .getTripPreviews(any(TripSearchRequest.class));
 
         // expect
         mockMvc.perform(get("/api/v1/trips")
@@ -211,7 +211,7 @@ class TripControllerTest {
                 .contents("contents")
                 .build();
         doReturn(tripDetailResponse).when(tripService)
-                .getDetail(any(Long.class));
+                .getTripDetail(any(Long.class));
 
         // expect
         mockMvc.perform(get("/api/v1/trips/{tripId}", 1L)

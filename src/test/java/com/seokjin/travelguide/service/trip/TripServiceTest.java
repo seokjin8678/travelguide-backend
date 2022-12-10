@@ -41,7 +41,7 @@ class TripServiceTest {
                 .save(any(Trip.class));
 
         // when
-        TripCreateResponse response = tripService.create(request, "nickname");
+        TripCreateResponse response = tripService.createTrip(request, "nickname");
 
         // then
         assertThat(response).isNotNull();

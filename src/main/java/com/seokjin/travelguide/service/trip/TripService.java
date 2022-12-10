@@ -21,19 +21,19 @@ public class TripService {
     private final TripRepository tripRepository;
 
     @Transactional
-    public TripCreateResponse create(TripCreateRequest request, String nickname) {
+    public TripCreateResponse createTrip(TripCreateRequest request, String nickname) {
         Trip trip = request.toEntity(nickname);
         tripRepository.save(trip);
         return TripCreateResponse.of(trip);
     }
 
     @Transactional(readOnly = true)
-    public Page<TripPreviewResponse> getPreviews(TripSearchRequest searchRequest) {
+    public Page<TripPreviewResponse> getTripPreviews(TripSearchRequest searchRequest) {
         return tripRepository.findTripPreviews(searchRequest);
     }
 
     @Transactional(readOnly = true)
-    public TripDetailResponse getDetail(Long tripId) {
+    public TripDetailResponse getTripDetail(Long tripId) {
         return tripRepository.findTripDetail(tripId)
                 .orElseThrow(() -> new TripNotFoundException("여행 조회 오류: 존재하지 않는 ID"));
     }
