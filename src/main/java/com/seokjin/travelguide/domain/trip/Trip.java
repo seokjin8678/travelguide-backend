@@ -26,7 +26,7 @@ public class Trip {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "description")
     private String desc;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
