@@ -48,7 +48,7 @@ public class TripController {
     }
 
     @GetMapping
-    public Page<TripPreviewResponse> getTripPreviews(@ModelAttribute TripSearchRequest request) {
+    public Page<TripPreviewResponse> getTripPreviews(@ModelAttribute @Valid TripSearchRequest request) {
         return tripService.getTripPreviews(request);
     }
 
@@ -65,7 +65,7 @@ public class TripController {
 
     @GetMapping("/{tripId}/comments")
     public Page<TripCommentResponse> getTripComments(@PathVariable Long tripId,
-                                                     @ModelAttribute TripCommentSearchRequest request) {
+                                                     @ModelAttribute @Valid TripCommentSearchRequest request) {
         return tripService.getComments(tripId, request);
     }
 
