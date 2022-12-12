@@ -4,15 +4,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
-@PropertySource("classpath:ip.properties")
 public class CorsConfig {
     @Bean
-    public CorsConfigurationSource corsConfigurationSource(@Value("${frontend-ip-address}") String ipAddress) {
+    public CorsConfigurationSource corsConfigurationSource(@Value("${api.frontend-ip-address}") String ipAddress) {
         return request -> {
             CorsConfiguration configuration = new CorsConfiguration();
             configuration.setAllowedOrigins(List.of(ipAddress));

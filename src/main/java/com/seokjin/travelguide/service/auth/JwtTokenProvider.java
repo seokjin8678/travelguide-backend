@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-@PropertySource("classpath:jwt.properties")
 public class JwtTokenProvider implements InitializingBean {
 
     private final String secret;
@@ -34,8 +32,8 @@ public class JwtTokenProvider implements InitializingBean {
 
     private Key key;
 
-    public JwtTokenProvider(@Value("${secret}") String secret,
-                            @Value("${token-validate-second}") long tokenValidateSecond) {
+    public JwtTokenProvider(@Value("${jwt.secret}") String secret,
+                            @Value("${jwt.token-validate-second}") long tokenValidateSecond) {
         this.secret = secret;
         this.tokenValidateMilliSecond = tokenValidateSecond * 1000;
     }

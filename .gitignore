@@ -40,8 +40,7 @@ out/
 src/main/generated/
 
 ### SECURITY ###
-src/main/resources/jwt.properties
-src/main/resources/ip.properties
+src/main/resources/application-prod.yml
 
 ### DOCS ###
 src/main/resources/static/docs/index.html
